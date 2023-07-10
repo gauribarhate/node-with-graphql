@@ -6,16 +6,22 @@ import { ProductModule } from './product/product.module';
 import { ProductResolver } from './product/product.resolver';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ConfigModule } from '@nestjs/config';
+import configuration from './config/configuration';
+import dotenv from 'dotenv';
+
+// dotenv.config({ path: '../environment/.env' });
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      load: [configuration],
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'graphqldemo',
+      username: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE,
       entities: [__dirname + '/**/*.entity.{ts,js}'],
       synchronize: true,
     }),
@@ -23,12 +29,15 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
-      playground: true
+      playground: true,
     }),
 
     ProductModule,
   ],
-  // controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {
+  constructor() {
+    console.log(process.env);
+  }
+}
