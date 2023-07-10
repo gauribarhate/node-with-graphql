@@ -8,10 +8,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
-import dotenv from 'dotenv';
-
-// dotenv.config({ path: '../environment/.env' });
-
 @Module({
   imports: [
     ConfigModule.forRoot({
