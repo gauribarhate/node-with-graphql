@@ -43,7 +43,6 @@ export class ProductService {
     await this.repository.save(productData);
 
     const kafka = new Kafka({
-      clientId: 'my-app',
       brokers: ['localhost:29092'],
     });
 
