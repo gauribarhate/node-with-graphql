@@ -5,11 +5,13 @@ import { Repository } from 'typeorm';
 import { ProductInputType, ProductTypeUpdate } from './product.type';
 import { UserEntity } from 'src/user/user.entity';
 import { Kafka } from 'kafkajs';
+import { KafkaService } from 'src/kafka/kafka.service';
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(ProductEntity)
     private repository: Repository<ProductEntity>,
+    private kafkaService: KafkaService,
   ) {}
 
   async getProducts(user: UserEntity) {
@@ -42,17 +44,8 @@ export class ProductService {
     productData['user'] = user;
     await this.repository.save(productData);
 
-    const kafka = new Kafka({
-      brokers: ['localhost:29092'],
-    });
-
-    const producer = kafka.producer();
-
-    await producer.connect();
-    await producer.send({
-      topic: 'product-topic',
-      messages: [{ value: JSON.stringify(productData) }],
-    });
+    const productId = productData['id'];
+    this.kafkaService.produceMessage(productData, user, productId);
     return productData;
   }
 
