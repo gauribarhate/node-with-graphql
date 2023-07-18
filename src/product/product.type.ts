@@ -1,4 +1,5 @@
 import { Field, ID, InputType, ObjectType } from '@nestjs/graphql';
+import { UserEntity } from 'src/user/user.entity';
 
 @ObjectType()
 export class ProductType {
@@ -37,6 +38,9 @@ export class ProductInputType {
 
   @Field()
   brand: string;
+
+  // @Field({ nullable: true })
+  // user: UserEntity;
 }
 
 @InputType()
