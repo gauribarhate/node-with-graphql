@@ -7,17 +7,10 @@ import {
 import { ProductResolver } from './product.resolver';
 import { ProductService } from './product.service';
 import { mock } from 'jest-mock-extended';
-
-const mockProduct: ProductType = {
-  id: 1,
-  title: 'Mock Product',
-  description: 'Mock Product',
-  price: 124,
-  tag: 'Mock Product',
-  brand: 'Mock Product',
-};
+import productFactory from './Factories/product.factory';
 
 describe('ProductResolver', () => {
+  const mockProduct = productFactory.build();
   let resolver: ProductResolver;
   const mockProductService = mock<ProductService>();
 
@@ -45,13 +38,13 @@ describe('ProductResolver', () => {
   it('should update product', async () => {
     await mockProductService.updateProduct.mockResolvedValue(mockProduct);
     const result = await resolver.updateProduct({} as ProductTypeUpdate);
-    expect(result.description).toEqual('Mock Product');
+    expect(result.description).toEqual(mockProduct.description);
   });
 
   it('should delete given product', async () => {
     await mockProductService.deleteProduct.mockResolvedValue(mockProduct);
     const result = await resolver.deleteProduct(1);
-    expect(result.description).toEqual('Mock Product');
+    expect(result.description).toEqual(mockProduct.description);
   });
 
   it('should get products', async () => {
