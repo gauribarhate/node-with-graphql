@@ -15,12 +15,16 @@ export class ProductResolver {
   }
 
   @Mutation(() => ProductType)
-  createProduct(@Args('productData') productData: ProductInputType) {
-    return this.productService.createProduct(productData);
+  async createProduct(
+    @Args('productData') productData: ProductInputType,
+  ): Promise<ProductType> {
+    return await this.productService.createProduct(productData);
   }
 
   @Mutation(() => ProductType)
-  updateProduct(@Args('productData') productData: ProductTypeUpdate) {
+  updateProduct(
+    @Args('productData') productData: ProductTypeUpdate,
+  ): Promise<ProductType> {
     return this.productService.updateProduct(productData);
   }
 

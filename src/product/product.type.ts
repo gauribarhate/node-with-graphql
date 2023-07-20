@@ -12,7 +12,7 @@ export class ProductType {
   description: string;
 
   @Field()
-  price: string;
+  price: number;
 
   @Field()
   tag: string;
